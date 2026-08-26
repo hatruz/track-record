@@ -1,2 +1,2 @@
 # track-record
-track record my strategy 
+ссылка для просмотра трек-рекорда и статистики: https://hatruz.github.io/track-record/
