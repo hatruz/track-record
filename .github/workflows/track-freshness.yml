@@ -1,0 +1,28 @@
+name: track-freshness
+
+on:
+  schedule:
+    - cron: '17 7 * * *'   # ~10:17 МСК, заведомо после публикации в 03:00
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+      - name: Свежесть последнего коммита
+        run: |
+          last=$(git log -1 --format=%ct)
+          now=$(date -u +%s)
+          age_h=$(( (now - last) / 3600 ))
+          echo "Последний коммит трека: ${age_h} ч назад ($(git log -1 --format='%h %ci %s'))"
+          if [ "$age_h" -gt 80 ]; then
+            echo "::error title=Трек протух::${age_h} ч без публикации — VPS или публикатор встали. Проверь бота."
+            exit 1
+          fi
+          echo "Порядок: трек свежий."
