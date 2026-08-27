@@ -21,7 +21,7 @@ jobs:
           now=$(date -u +%s)
           age_h=$(( (now - last) / 3600 ))
           echo "Последний коммит трека: ${age_h} ч назад ($(git log -1 --format='%h %ci %s'))"
-          if [ "$age_h" -gt 80 ]; then
+          if [ "$age_h" -gt 0 ]; then
             echo "::error title=Трек протух::${age_h} ч без публикации — VPS или публикатор встали. Проверь бота."
             exit 1
           fi
